@@ -38,6 +38,18 @@ public class CacheConfiguration {
             cm.createCache(cn.wilmar.demo.domain.User.class.getName(), jcacheConfiguration);
             cm.createCache(cn.wilmar.demo.domain.Authority.class.getName(), jcacheConfiguration);
             cm.createCache(cn.wilmar.demo.domain.User.class.getName() + ".authorities", jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Region.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Country.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Location.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Department.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Department.class.getName() + ".employees", jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Task.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Task.class.getName() + ".jobs", jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Employee.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Employee.class.getName() + ".jobs", jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Job.class.getName(), jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.Job.class.getName() + ".tasks", jcacheConfiguration);
+            cm.createCache(cn.wilmar.demo.domain.JobHistory.class.getName(), jcacheConfiguration);
             // jhipster-needle-ehcache-add-entry
         };
     }
