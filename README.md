@@ -1,72 +1,237 @@
 # BackendServiceDemo
 This application was generated using JHipster 5.0.2, you can find documentation and help at [https://www.jhipster.tech/documentation-archive/v5.0.2](https://www.jhipster.tech/documentation-archive/v5.0.2).
 
-## Development
 
-To start your application in the dev profile, simply run:
-
-    ./mvnw
-
-
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
+## 创建项目
+```
+jhipster --skip-client
+```
 
 
+```
+(*) API first development using OpenAPI-generator
+ 
+ Would you like to enable internationalization support? No
+```
 
-## Building for production
+直接运行
+```
+mvn
+```
 
-To optimize the BackendServiceDemo application for production, run:
+可访问链接：
+http://localhost:8080/v2/api-docs
 
-    ./mvnw -Pprod clean package
+认证：
+http://localhost:8080/api/authenticate
 
-To ensure everything worked, run:
+[{"key":"Content-Type","value":"application/json","description":""}]
 
-    java -jar target/*.war
-
-
-Refer to [Using JHipster in production][] for more details.
-
-## Testing
-
-To launch your application's tests, run:
-
-    ./mvnw clean test
-
-For more information, refer to the [Running tests page][].
-
-## Using Docker to simplify development (optional)
-
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-
-For example, to start a mysql database in a docker container, run:
-
-    docker-compose -f src/main/docker/mysql.yml up -d
-
-To stop it and remove the container, run:
-
-    docker-compose -f src/main/docker/mysql.yml down
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a docker image of your app by running:
-
-    ./mvnw verify -Pprod dockerfile:build dockerfile:tag@version dockerfile:tag@commit
-
-Then run:
-
-    docker-compose -f src/main/docker/app.yml up -d
-
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][] page for more information.
-
-[JHipster Homepage and latest documentation]: https://www.jhipster.tech
-[JHipster 5.0.2 archive]: https://www.jhipster.tech/documentation-archive/v5.0.2
-
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v5.0.2/development/
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v5.0.2/docker-compose
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v5.0.2/production/
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v5.0.2/running-tests/
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v5.0.2/setting-up-ci/
+body raw json
+{
+  "username": "admin",
+  "password": "admin",
+  "rememberMe": true
+}
 
 
+http://localhost:8080/api/users
+提交内容
+```
+Authorization=Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImF1dGgiOiJST0xFX0FETUlOLFJPTEVfVVNFUiIsImV4cCI6MTUzMzcwNzYwM30.QSw9Oorc_i9i7yWcvTRPJbTcmfg-MY1KJUoyLAtPTK25b0Ai-7VaHWwq5_hqwongPyVZTOyg2A73xYKate6MMw
+```
+
+http://localhost:8080/api/account
+
+## 临时去掉安全认证
+SecurityConfiguration
+```
+
+//            .antMatchers("/api/**").authenticated()
+            .antMatchers("/api/**").permitAll()
+```
+
+还要去掉 UserResource 里面所有的 `@Secured` 注解
+
+## 设计业务模型
+
+用在线 JDL Studio 工具进行模型设计：https://start.jhipster.tech/jdl-studio/
+
+然后下载 jdl 文件导入：
+
+jhipster-jdl.jh
+```
+entity Region {
+	regionName String
+}
+
+entity Country {
+	countryName String
+}
+
+// an ignored comment
+/** not an ignored comment */
+entity Location {
+	streetAddress String,
+	postalCode String,
+	city String,
+	stateProvince String
+}
+
+entity Department {
+	departmentName String required
+}
+
+/**
+ * Task entity.
+ * @author The JHipster team.
+ */
+entity Task {
+	title String,
+	description String
+}
+
+/**
+ * The Employee entity.
+ */
+entity Employee {
+	/**
+	* The firstname attribute.
+	*/
+	firstName String,
+	lastName String,
+	email String,
+	phoneNumber String,
+	hireDate Instant,
+	salary Long,
+	commissionPct Long
+}
+
+entity Job {
+	jobTitle String,
+	minSalary Long,
+	maxSalary Long
+}
+
+entity JobHistory {
+	startDate Instant,
+	endDate Instant,
+	language Language
+}
+
+enum Language {
+    FRENCH, ENGLISH, SPANISH
+}
+
+relationship OneToOne {
+	Country{region} to Region
+}
+
+relationship OneToOne {
+	Location{country} to Country
+}
+
+relationship OneToOne {
+	Department{location} to Location
+}
+
+relationship ManyToMany {
+	Job{task(title)} to Task{job}
+}
+
+// defining multiple OneToMany relationships with comments
+relationship OneToMany {
+	Employee{job} to Job,
+	/**
+	* A relationship
+	*/
+	Department{employee} to
+	/**
+	* Another side of the same relationship
+	*/
+	Employee
+}
+
+relationship ManyToOne {
+	Employee{manager} to Employee
+}
+
+// defining multiple oneToOne relationships
+relationship OneToOne {
+	JobHistory{job} to Job,
+	JobHistory{department} to Department,
+	JobHistory{employee} to Employee
+}
+
+// Set pagination options
+paginate JobHistory, Employee with infinite-scroll
+paginate Job with pagination
+
+dto * with mapstruct
+
+// Set service options to all except few
+service all with serviceImpl except Employee, Job
+// Set an angular suffix
+angularSuffix * with mySuffix
+
+```
+
+导入命令
+```
+jhipster import-jdl "d:\Projects\JHipster\jhipster-jdl.jh"
+```
+
+重启项目后测试：
+
+查询
+```
+curl -X GET http://localhost:8080/api/regions
+```
+
+新建
+```
+curl -X POST -H "Content-Type:application/json" -H "Accept:application/json" -d '{"regionName":"China"}'  http://localhost:8080/api/regions
+```
+
+删除
+```
+curl -X DELETE http://localhost:8080/api/regions/3
+```
+
+## Swagger UI
+
+加上 Swagger UI 支持
+pom.xml
+```
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+```
+
+一些 Swagger 服务声明的属性可以在 application.yml 里面配置
+```
+    swagger:
+        default-include-pattern: /api/.*
+        title: BackendServiceDemo API
+        description: BackendServiceDemo API 文档
+        version: 0.0.1
+        terms-of-service-url:
+        contact-name: 殷国伟
+        contact-url:
+        contact-email: yinguowei@cn.wilmar-intl.com
+        license: Wilmar WPL
+        license-url: http://www.wilmar-international.com/licenses/LICENSE-2.0
+```
+
+给接口和参数增加说明
+```
+    @ApiOperation("新建区域地区")
+    @PostMapping("/regions")
+    @Timed
+    public ResponseEntity<RegionDTO> createRegion(
+        @ApiParam(name = "regionDTD", value = "地区传输对象", required = true)
+        @RequestBody RegionDTO regionDTO) throws URISyntaxException {
+```
