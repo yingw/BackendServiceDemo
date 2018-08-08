@@ -235,3 +235,5 @@ pom.xml
         @ApiParam(name = "regionDTD", value = "地区传输对象", required = true)
         @RequestBody RegionDTO regionDTO) throws URISyntaxException {
 ```
+重启后访问：
+http://localhost:8080/swagger-ui.html
