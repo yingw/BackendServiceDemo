@@ -86,18 +86,18 @@ jhipster:
         #allow-credentials: true
         #max-age: 1800
     mail:
-        from: BackendServiceDemo@localhost
+        from: yinguowei@cn.wilmar-intl.com
     swagger:
         default-include-pattern: /api/.*
         title: BackendServiceDemo API
-        description: BackendServiceDemo API documentation
+        description: BackendServiceDemo API 文档
         version: 0.0.1
         terms-of-service-url:
-        contact-name:
+        contact-name: 殷国伟
         contact-url:
-        contact-email:
-        license:
-        license-url:
+        contact-email: yinguowei@cn.wilmar-intl.com
+        license: Wilmar WPL
+        license-url: http://www.wilmar-international.com/licenses/LICENSE-2.0
 
 # ===================================================================
 # Application specific properties

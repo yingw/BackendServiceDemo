@@ -83,6 +83,13 @@
         <sonar.surefire.reportsPath>${project.testresult.directory}/surefire-reports</sonar.surefire.reportsPath>
         <sonar.tests>${project.basedir}/src/test/</sonar.tests>
 
+        <!-- added by yinguowei-->
+        <!-- Swagger -->
+        <springfox-swagger.version>2.9.2</springfox-swagger.version>
+<!--
+        <springfox.version>2.9.2</springfox.version>
+-->
+
         <!-- jhipster-needle-maven-property -->
     </properties>
 
@@ -100,6 +107,35 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- added by yinguowei-->
+
+        <!-- swagger -->
+<!--
+        <dependency>
+            <groupId>com.spring4all</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+            <version>1.7.0.RELEASE</version>
+        </dependency>
+-->
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger-ui</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+<!--
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-bean-validators</artifactId>
+            <version>${springfox-swagger.version}</version>
+        </dependency>
+-->
+
+
         <dependency>
             <groupId>io.github.jhipster</groupId>
             <artifactId>jhipster-framework</artifactId>
@@ -168,6 +204,7 @@
             <scope>test</scope>
             <!-- parent POM declares this dependency in default (compile) scope -->
         </dependency>
+        <!-- Swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
